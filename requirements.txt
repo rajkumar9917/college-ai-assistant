@@ -1,0 +1,24 @@
+# Django Web Framework
+# Used for backend server and web application
+Django>=4.2
+
+# Google Gemini AI API (optional AI chatbot support)
+google-genai
+
+# HTTP requests library
+requests
+
+# Environment variables loader (.env support)
+python-dotenv
+
+# Async HTTP client used by AI libraries
+httpx
+
+# Data validation library used by AI SDKs
+pydantic
+
+# Progress bar utility (used by AI SDK)
+tqdm
+
+# Typing support for Python
+typing-extensions

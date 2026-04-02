@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>University AI Assistant</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+<script>
+tailwind.config = {
+darkMode: "class",
+theme: {
+extend: {
+colors: {
+"deep-dark": "#0f172a"
+}
+}
+}
+}
+</script>
+
+<style>
+body { font-family: 'Inter', sans-serif; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+</style>
+</head>
+
+<body class="bg-deep-dark text-white overflow-hidden">
+
+<div class="flex h-screen">
+
+<!-- Sidebar -->
+<aside class="w-72 bg-white/5 backdrop-blur-xl flex flex-col border-r border-white/10 shadow-2xl">
+
+<div class="p-6 border-b border-white/10">
+<h1 class="font-bold text-lg tracking-wide">Agra College Agra</h1>
+<p class="text-xs text-blue-300">(D.B.R.A.U) Student Portal</p>
+</div>
+
+<nav class="flex-1 p-6 space-y-4 overflow-y-auto">
+
+<button onclick="newChat()" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-blue-600 transition">
+<span class="flex items-center justify-center gap-3 font-medium">
+<span class="material-symbols-outlined text-base">add_circle</span>
+New Chat
+</span>
+</button>
+
+<button onclick="clearChat()" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-blue-600 transition">
+<span class="flex items-center justify-center gap-3 font-medium">
+<span class="material-symbols-outlined text-base">delete</span>
+Clear Chat
+</span>
+</button>
+
+<div class="pt-4 border-t border-white/10">
+<p class="text-xs text-slate-400 mb-2">Chat History</p>
+
+<div id="sidebar-history" class="space-y-2 text-sm"></div>
+
+</div>
+
+</nav>
+</aside>
+
+<!-- Main -->
+<main class="flex-1 flex flex-col">
+
+<header class="h-16 border-b border-white/10 bg-yellow/5 flex items-center px-8">
+<h2 class="font-semibold">College AI Assistant</h2>
+</header>
+
+<div id="welcome-screen" class="flex-1 flex items-center justify-center text-center px-6">
+<div>
+<h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+Your Smart Academic Assistant
+</h1>
+<p class="mt-6 text-slate-400 text-lg max-w-2xl mx-auto">
+Get instant help with admissions, exams, scholarships, results, and university updates.
+</p>
+</div>
+</div>
+
+<div id="chat-container" class="hidden flex-1 overflow-y-auto p-8 space-y-6"></div>
+
+<footer class="p-6 border-t border-white/10 bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-xl">
+<div class="max-w-4xl mx-auto">
+
+<div class="relative flex items-center bg-slate-900/90 border border-white/10 rounded-2xl px-4 py-3 shadow-2xl focus-within:ring-2 focus-within:ring-blue-500">
+
+<textarea id="message-input"
+rows="1"
+placeholder="Ask about admissions, exams, scholarships..."
+class="flex-1 bg-transparent outline-none text-white placeholder-slate-400 text-sm px-3 py-2 resize-none max-h-32"></textarea>
+
+<button onclick="toggleMic()" id="mic-btn"
+class="ml-2 p-3 rounded-full bg-slate-800 hover:bg-blue-600">
+<span class="material-symbols-outlined text-white text-lg">mic</span>
+</button>
+
+<button onclick="sendMessage()"
+class="ml-2 bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-full shadow-lg">
+<span class="material-symbols-outlined text-white text-lg">arrow_upward</span>
+</button>
+
+</div>
+</div>
+</footer>
+
+</main>
+</div>
+
+<script>
+
+const chatContainer = document.getElementById("chat-container");
+const welcomeScreen = document.getElementById("welcome-screen");
+const textarea = document.getElementById("message-input");
+const sidebarHistory = document.getElementById("sidebar-history");
+
+textarea.addEventListener("input", function () {
+this.style.height = "auto";
+this.style.height = this.scrollHeight + "px";
+});
+
+window.onload = function(){
+loadMessages();
+loadSidebarHistory();
+};
+
+function loadMessages(){
+let messages = JSON.parse(localStorage.getItem("chat")) || [];
+
+if(messages.length > 0){
+welcomeScreen.classList.add("hidden");
+chatContainer.classList.remove("hidden");
+
+messages.forEach(msg => addMessage(msg.text, msg.type,false));
+}
+}
+
+function addMessage(text, type, speak=true){
+
+let div = document.createElement("div");
+
+div.className = type === "user"
+? "bg-blue-600 p-4 rounded-xl max-w-xl ml-auto"
+: "bg-white/5 p-4 rounded-xl border border-white/10 max-w-xl";
+
+div.innerHTML = `<p>${text}</p>`;
+
+chatContainer.appendChild(div);
+chatContainer.scrollTop = chatContainer.scrollHeight;
+
+if(type==="ai" && speak){
+speakText(text);
+}
+
+}
+
+function saveMessage(text, type){
+let messages = JSON.parse(localStorage.getItem("chat")) || [];
+messages.push({text, type});
+localStorage.setItem("chat", JSON.stringify(messages));
+loadSidebarHistory();
+}
+
+async function sendMessage(){
+
+let text = textarea.value.trim();
+if(text==="") return;
+
+welcomeScreen.classList.add("hidden");
+chatContainer.classList.remove("hidden");
+
+addMessage(text,"user");
+saveMessage(text,"user");
+
+textarea.value="";
+textarea.style.height="auto";
+
+let loadingDiv=document.createElement("div");
+loadingDiv.className="bg-white/5 p-4 rounded-xl border border-white/10 max-w-xl";
+loadingDiv.innerHTML="Typing...";
+chatContainer.appendChild(loadingDiv);
+
+try{
+
+let response = await fetch("/api/chat/",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:text})
+});
+
+let data = await response.json();
+
+loadingDiv.remove();
+
+addMessage(data.reply,"ai");
+saveMessage(data.reply,"ai");
+
+}catch{
+
+loadingDiv.remove();
+addMessage("Server Error. Please try again.","ai");
+
+}
+
+}
+
+textarea.addEventListener("keypress", function(e){
+if(e.key==="Enter" && !e.shiftKey){
+e.preventDefault();
+sendMessage();
+}
+});
+
+function clearChat(){
+localStorage.removeItem("chat");
+chatContainer.innerHTML="";
+chatContainer.classList.add("hidden");
+welcomeScreen.classList.remove("hidden");
+loadSidebarHistory();
+}
+
+function newChat(){
+clearChat();
+}
+
+function loadSidebarHistory(){
+
+let history = JSON.parse(localStorage.getItem("chat")) || [];
+
+sidebarHistory.innerHTML="";
+
+history.slice(-10).forEach(msg=>{
+
+if(msg.type==="user"){
+
+let div=document.createElement("div");
+
+div.className="p-2 bg-white/5 rounded-lg hover:bg-blue-600 cursor-pointer truncate";
+
+div.textContent=msg.text;
+
+sidebarHistory.appendChild(div);
+
+}
+
+});
+
+}
+
+function speakText(text){
+
+const speech = new SpeechSynthesisUtterance(text);
+
+speech.lang="en-US";
+
+speech.rate=1;
+
+speech.pitch=1;
+
+window.speechSynthesis.speak(speech);
+
+}
+
+let recognition;
+let isListening=false;
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+recognition = new SpeechRecognition();
+
+recognition.lang = "en-US";
+
+recognition.onresult = function (event) {
+textarea.value = event.results[0][0].transcript;
+};
+
+recognition.onend = function () {
+isListening = false;
+document.getElementById("mic-btn").classList.remove("bg-red-600");
+};
+
+}
+
+function toggleMic(){
+
+if(!recognition){
+alert("Speech Recognition not supported");
+return;
+}
+
+if(!isListening){
+recognition.start();
+isListening=true;
+document.getElementById("mic-btn").classList.add("bg-red-600");
+}else{
+recognition.stop();
+isListening=false;
+document.getElementById("mic-btn").classList.remove("bg-red-600");
+}
+
+}
+
+</script>
+
+</body>
+</html>
