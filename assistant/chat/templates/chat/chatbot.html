@@ -1,314 +1,441 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>University AI Assistant</title>
+<title>Agra College AI Assistant</title>
+<link rel="icon" type="image/jpeg" href="{% static 'images/agra.jpeg' %}">
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
 <script>
 tailwind.config = {
-darkMode: "class",
-theme: {
-extend: {
-colors: {
-"deep-dark": "#0f172a"
-}
-}
-}
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+      colors: {
+        // Solid Agra College Brand Colors
+        "agra-blue": "#0c3b73",
+        "agra-yellow": "#f9ca0f",
+        "agra-red": "#d32128",
+        "agra-green": "#2b8a3e",
+        "bg-main": "#f3f4f6", // Light gray background to make cards pop
+      },
+      animation: {
+        'slide-up': 'slideUp 0.3s ease-out forwards',
+        'pulse-glow': 'pulseGlow 2s infinite',
+      },
+      keyframes: {
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(15px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        pulseGlow: {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(211, 33, 40, 0.4)' },
+          '70%': { boxShadow: '0 0 0 10px rgba(211, 33, 40, 0)' },
+        }
+      }
+    }
+  }
 }
 </script>
 
 <style>
-body { font-family: 'Inter', sans-serif; }
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400; }
+
+/* Clean Solid Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { 
+  background: #cbd5e1; 
+  border-radius: 4px; 
+}
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Typing animation dots */
+.typing-dot {
+  animation: typingBounce 1.4s infinite ease-in-out both;
+  background-color: #0c3b73;
+}
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
 </style>
 </head>
 
-<body class="bg-deep-dark text-white overflow-hidden">
+<body class="bg-bg-main text-gray-800 overflow-hidden selection:bg-agra-yellow/40">
 
-<div class="flex h-screen">
+<div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-gray-900/50 z-40 hidden md:hidden transition-opacity"></div>
 
-<!-- Sidebar -->
-<aside class="w-72 bg-white/5 backdrop-blur-xl flex flex-col border-r border-white/10 shadow-2xl">
+<div class="flex h-screen w-full relative">
 
-<div class="p-6 border-b border-white/10">
-<h1 class="font-bold text-lg tracking-wide">Agra College Agra</h1>
-<p class="text-xs text-blue-300">(D.B.R.A.U) Student Portal</p>
-</div>
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-2xl border-r border-gray-200 flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
+  
+  <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+    <div class="flex flex-row items-center gap-3">
+      <div class="w-16 h-auto bg-white rounded-xl shadow-sm border border-gray-200 p-2 mb-3">
+        <img src="{% static 'images/agra.jpeg' %}" alt="Logo" class="w-full h-auto">
+      </div>
+      <div>
+      <h1 class="font-bold text-xl tracking-tight text-agra-blue">AI Chatbot</h1>
+      <p class="text-xs text-gray-500 font-semibold tracking-wider mt-1">AI Assistant</p>
+    </div>
+    </div>
+    <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors">
+      <span class="material-symbols-outlined text-xl">close</span>
+    </button>
+  </div>
 
-<nav class="flex-1 p-6 space-y-4 overflow-y-auto">
+  <nav class="flex-1 p-5 space-y-4 overflow-y-auto bg-white">
+    <div class="space-y-3">
+      <button onclick="newChat(); toggleSidebarIfMobile();" class="w-full px-4 py-3 rounded-xl bg-agra-blue hover:bg-blue-900 text-white shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 font-medium">
+        <span class="material-symbols-outlined text-agra-yellow">add_circle</span>
+        New Conversation
+      </button>
 
-<button onclick="newChat()" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-blue-600 transition">
-<span class="flex items-center justify-center gap-3 font-medium">
-<span class="material-symbols-outlined text-base">add_circle</span>
-New Chat
-</span>
-</button>
+      <button onclick="clearChat()" class="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 hover:bg-red-50 hover:border-agra-red text-gray-700 hover:text-agra-red shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium">
+        <span class="material-symbols-outlined">delete</span>
+        Clear History
+      </button>
+    </div>
 
-<button onclick="clearChat()" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-blue-600 transition">
-<span class="flex items-center justify-center gap-3 font-medium">
-<span class="material-symbols-outlined text-base">delete</span>
-Clear Chat
-</span>
-</button>
-
-<div class="pt-4 border-t border-white/10">
-<p class="text-xs text-slate-400 mb-2">Chat History</p>
-
-<div id="sidebar-history" class="space-y-2 text-sm"></div>
-
-</div>
-
-</nav>
+    <div class="pt-6">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Recent Chats</p>
+      <div id="sidebar-history" class="space-y-2 text-sm"></div>
+    </div>
+  </nav>
 </aside>
 
-<!-- Main -->
-<main class="flex-1 flex flex-col">
+<main class="flex-1 flex flex-col relative w-full h-full bg-bg-main">
+  
+  <header class="h-16 md:h-20 bg-white shadow-sm border-b border-gray-200 flex items-center px-4 md:px-8 z-10 justify-between">
+    <div class="flex items-center gap-3">
+      <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <img src="{% static 'images/college.jpeg' %}" alt="Logo" class="w-32 h-auto md:block md:w-48">
+    </div>
+    <div class="flex items-center gap-2 px-3 py-1.5 bg-green-50 border border-green-200 rounded-full">
+      <div class="w-2.5 h-2.5 rounded-full bg-agra-green animate-pulse"></div>
+      <span class="text-xs font-semibold text-agra-green">AI Online</span>
+    </div>
+  </header>
 
-<header class="h-16 border-b border-white/10 bg-yellow/5 flex items-center px-8">
-<h2 class="font-semibold">College AI Assistant</h2>
-</header>
+  <div id="welcome-screen" class="flex-1 flex items-center justify-center text-center px-4 md:px-8 overflow-y-auto">
+    <div class="max-w-2xl animate-slide-up py-10">
+      <div class="inline-flex items-center justify-center p-4 rounded-2xl bg-white shadow-md border border-gray-100 mb-6 text-agra-blue">
+        <span class="material-symbols-outlined text-5xl">COLLEGE</span>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 tracking-tight pb-2">
+        Agra College <span class="text-agra-blue">Assistant</span>
+      </h1>
+      <p class="mt-4 text-gray-600 text-base md:text-lg max-w-xl mx-auto">
+        Your smart academic guide for admissions, examinations, scholarships, results, and campus updates.
+      </p>
+      
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <button class="px-4 py-2.5 rounded-lg bg-white shadow-sm border border-gray-200 text-sm text-gray-700 hover:border-agra-blue hover:text-agra-blue transition-colors font-medium">"When are the semester exams?"</button>
+        <button class="px-4 py-2.5 rounded-lg bg-white shadow-sm border border-gray-200 text-sm text-gray-700 hover:border-agra-yellow hover:text-yellow-700 transition-colors font-medium">"How to apply for scholarships?"</button>
+        <button class="px-4 py-2.5 rounded-lg bg-white shadow-sm border border-gray-200 text-sm text-gray-700 hover:border-agra-red hover:text-agra-red transition-colors font-medium">"Show me the admission process"</button>
+      </div>
+    </div>
+  </div>
 
-<div id="welcome-screen" class="flex-1 flex items-center justify-center text-center px-6">
-<div>
-<h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-Your Smart Academic Assistant
-</h1>
-<p class="mt-6 text-slate-400 text-lg max-w-2xl mx-auto">
-Get instant help with admissions, exams, scholarships, results, and university updates.
-</p>
-</div>
-</div>
+  <div id="chat-container" class="hidden flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scroll-smooth"></div>
 
-<div id="chat-container" class="hidden flex-1 overflow-y-auto p-8 space-y-6"></div>
+  <footer class="p-4 md:p-6 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-10">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex items-end bg-white border-2 border-gray-200 rounded-2xl px-2 py-2 shadow-sm transition-colors focus-within:border-agra-blue focus-within:shadow-md">
 
-<footer class="p-6 border-t border-white/10 bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-xl">
-<div class="max-w-4xl mx-auto">
+        <textarea id="message-input"
+          rows="1"
+          placeholder="Type your question here..."
+          class="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm md:text-base px-4 py-3 resize-none max-h-32 self-center font-medium"></textarea>
 
-<div class="relative flex items-center bg-slate-900/90 border border-white/10 rounded-2xl px-4 py-3 shadow-2xl focus-within:ring-2 focus-within:ring-blue-500">
+        <div class="flex items-center gap-2 pr-2 pb-1 self-end">
+          <button onclick="toggleMic()" id="mic-btn" title="Speak to typing"
+            class="p-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 transition-all duration-200 flex items-center justify-center">
+            <span class="material-symbols-outlined text-xl">mic</span>
+          </button>
 
-<textarea id="message-input"
-rows="1"
-placeholder="Ask about admissions, exams, scholarships..."
-class="flex-1 bg-transparent outline-none text-white placeholder-slate-400 text-sm px-3 py-2 resize-none max-h-32"></textarea>
+          <button onclick="sendMessage()"
+            class="bg-agra-blue hover:bg-blue-900 text-white p-3 rounded-xl shadow-md hover:shadow-lg transition-transform active:scale-95 flex items-center justify-center">
+            <span class="material-symbols-outlined text-xl">send</span>
+          </button>
+        </div>
 
-<button onclick="toggleMic()" id="mic-btn"
-class="ml-2 p-3 rounded-full bg-slate-800 hover:bg-blue-600">
-<span class="material-symbols-outlined text-white text-lg">mic</span>
-</button>
-
-<button onclick="sendMessage()"
-class="ml-2 bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-full shadow-lg">
-<span class="material-symbols-outlined text-white text-lg">arrow_upward</span>
-</button>
-
-</div>
-</div>
-</footer>
+      </div>
+    </div>
+  </footer>
 
 </main>
 </div>
 
 <script>
+// Sidebar Toggle
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebar-overlay');
 
+function toggleSidebar() {
+  sidebar.classList.toggle('-translate-x-full');
+  overlay.classList.toggle('hidden');
+}
+
+function toggleSidebarIfMobile() {
+  if (window.innerWidth < 768) { 
+    toggleSidebar();
+  }
+}
+
+// Chat Logic
 const chatContainer = document.getElementById("chat-container");
 const welcomeScreen = document.getElementById("welcome-screen");
 const textarea = document.getElementById("message-input");
 const sidebarHistory = document.getElementById("sidebar-history");
 
 textarea.addEventListener("input", function () {
-this.style.height = "auto";
-this.style.height = this.scrollHeight + "px";
+  this.style.height = "auto";
+  this.style.height = this.scrollHeight + "px";
 });
 
 window.onload = function(){
-loadMessages();
-loadSidebarHistory();
+  loadMessages();
+  loadSidebarHistory();
 };
 
 function loadMessages(){
-let messages = JSON.parse(localStorage.getItem("chat")) || [];
-
-if(messages.length > 0){
-welcomeScreen.classList.add("hidden");
-chatContainer.classList.remove("hidden");
-
-messages.forEach(msg => addMessage(msg.text, msg.type,false));
-}
+  let messages = JSON.parse(localStorage.getItem("chat")) || [];
+  if(messages.length > 0){
+    welcomeScreen.classList.add("hidden");
+    chatContainer.classList.remove("hidden");
+    messages.forEach(msg => addMessage(msg.text, msg.type, false));
+  }
 }
 
-function addMessage(text, type, speak=true){
-
-let div = document.createElement("div");
-
-div.className = type === "user"
-? "bg-blue-600 p-4 rounded-xl max-w-xl ml-auto"
-: "bg-white/5 p-4 rounded-xl border border-white/10 max-w-xl";
-
-div.innerHTML = `<p>${text}</p>`;
-
-chatContainer.appendChild(div);
-chatContainer.scrollTop = chatContainer.scrollHeight;
-
-if(type==="ai" && speak){
-speakText(text);
+// Text-to-Speech Function
+function speakText(text) {
+  window.speechSynthesis.cancel();
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "en-IN"; 
+  speech.rate = 1;
+  speech.pitch = 1;
+  window.speechSynthesis.speak(speech);
 }
 
+function addMessage(text, type, speak=false){
+  let div = document.createElement("div");
+  let safeText = text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  
+  if (type === "user") {
+    // Solid Blue Card for User
+    div.className = "bg-agra-blue text-white p-4 md:p-5 rounded-2xl rounded-tr-sm shadow-md max-w-[90%] md:max-w-[80%] lg:max-w-2xl ml-auto animate-slide-up text-sm md:text-base border border-blue-900";
+    div.innerHTML = `<p>${text}</p>`;
+  } else {
+    // Solid White Card for AI with Yellow/Red Accents
+    div.className = "bg-white text-gray-800 p-4 md:p-5 rounded-2xl rounded-tl-sm shadow-md border border-gray-200 max-w-[90%] md:max-w-[80%] lg:max-w-2xl animate-slide-up leading-relaxed text-sm md:text-base relative pb-14";
+    div.innerHTML = `
+    <div class="flex justify-between items-center gap-2 mb-2 pb-2 border-b border-gray-100">
+        <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-agra-red text-lg">smart_toy</span>
+        <span class="font-bold text-xs text-gray-500 uppercase tracking-wide">AI Assistant</span>
+        </div>
+        
+        <div class="flex items-center gap-2">
+    
+    <button onclick="copyText('${safeText}', this)" title="Copy Message" class="px-2 py-1.5 rounded-lg bg-gray-50 hover:bg-agra-yellow border border-gray-200 hover:border-agra-yellow text-gray-600 hover:text-gray-900 shadow-sm transition-all duration-200 flex items-center justify-center group">
+        <span class="material-symbols-outlined text-[18px] group-hover:scale-110 transition-transform icon-span">content_copy</span>
+    </button>
+
+    <button onclick="speakText('${safeText}')" title="Read Aloud" class="px-2 py-1.5 rounded-lg bg-gray-50 hover:bg-agra-yellow border border-gray-200 hover:border-agra-yellow text-gray-600 hover:text-gray-900 shadow-sm transition-all duration-200 flex items-center justify-center group">
+        <span class="material-symbols-outlined text-[18px] group-hover:scale-110 transition-transform">volume_up</span>
+    </button>
+
+</div>
+    </div>
+      <p class="text-gray-700">${text}</p>
+      
+    `;
+  }
+
+  chatContainer.appendChild(div);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+
+  if(type==="ai" && speak){
+    speakText(text);
+  }
+}
+// Copy to Clipboard Function
+function copyText(text, btnElement) {
+  // Use the modern Clipboard API
+  navigator.clipboard.writeText(text).then(() => {
+    // Find the icon span inside the clicked button
+    const iconSpan = btnElement.querySelector('.icon-span');
+    
+    // Store original icon name
+    const originalIcon = iconSpan.innerText;
+    
+    // Change icon to a checkmark to show success
+    iconSpan.innerText = 'check';
+    btnElement.classList.add('text-agra-green', 'border-agra-green'); // Optional: make it green briefly
+    
+    // Revert back to the copy icon after 2 seconds
+    setTimeout(() => {
+      iconSpan.innerText = originalIcon;
+      btnElement.classList.remove('text-agra-green', 'border-agra-green');
+    }, 2000);
+    
+  }).catch(err => {
+    console.error('Failed to copy text: ', err);
+    alert('Failed to copy text to clipboard.');
+  });
 }
 
 function saveMessage(text, type){
-let messages = JSON.parse(localStorage.getItem("chat")) || [];
-messages.push({text, type});
-localStorage.setItem("chat", JSON.stringify(messages));
-loadSidebarHistory();
+  let messages = JSON.parse(localStorage.getItem("chat")) || [];
+  messages.push({text, type});
+  localStorage.setItem("chat", JSON.stringify(messages));
+  loadSidebarHistory();
 }
 
 async function sendMessage(){
+  let text = textarea.value.trim();
+  if(text==="") return;
 
-let text = textarea.value.trim();
-if(text==="") return;
+  welcomeScreen.classList.add("hidden");
+  chatContainer.classList.remove("hidden");
 
-welcomeScreen.classList.add("hidden");
-chatContainer.classList.remove("hidden");
+  addMessage(text,"user");
+  saveMessage(text,"user");
 
-addMessage(text,"user");
-saveMessage(text,"user");
+  textarea.value="";
+  textarea.style.height="auto";
 
-textarea.value="";
-textarea.style.height="auto";
+  let loadingDiv = document.createElement("div");
+  loadingDiv.className="bg-white p-4 md:p-5 rounded-2xl rounded-tl-sm shadow-md border border-gray-200 max-w-[100px] animate-slide-up flex gap-1.5 items-center justify-center";
+  loadingDiv.innerHTML=`
+    <div class="w-2.5 h-2.5 rounded-full typing-dot"></div>
+    <div class="w-2.5 h-2.5 rounded-full typing-dot"></div>
+    <div class="w-2.5 h-2.5 rounded-full typing-dot"></div>
+  `;
+  chatContainer.appendChild(loadingDiv);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 
-let loadingDiv=document.createElement("div");
-loadingDiv.className="bg-white/5 p-4 rounded-xl border border-white/10 max-w-xl";
-loadingDiv.innerHTML="Typing...";
-chatContainer.appendChild(loadingDiv);
-
-try{
-
-let response = await fetch("/api/chat/",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({message:text})
-});
-
-let data = await response.json();
-
-loadingDiv.remove();
-
-addMessage(data.reply,"ai");
-saveMessage(data.reply,"ai");
-
-}catch{
-
-loadingDiv.remove();
-addMessage("Server Error. Please try again.","ai");
-
-}
-
+  try{
+    let response = await fetch("/api/chat/",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:text})
+    });
+    let data = await response.json();
+    loadingDiv.remove();
+    addMessage(data.reply, "ai", false); 
+    saveMessage(data.reply, "ai");
+  }catch{
+    loadingDiv.remove();
+    addMessage("Server Error. Please try again.", "ai", false);
+  }
 }
 
 textarea.addEventListener("keypress", function(e){
-if(e.key==="Enter" && !e.shiftKey){
-e.preventDefault();
-sendMessage();
-}
+  if(e.key==="Enter" && !e.shiftKey){
+    e.preventDefault();
+    sendMessage();
+  }
 });
 
 function clearChat(){
-localStorage.removeItem("chat");
-chatContainer.innerHTML="";
-chatContainer.classList.add("hidden");
-welcomeScreen.classList.remove("hidden");
-loadSidebarHistory();
+  localStorage.removeItem("chat");
+  chatContainer.innerHTML="";
+  chatContainer.classList.add("hidden");
+  welcomeScreen.classList.remove("hidden");
+  loadSidebarHistory();
+  toggleSidebarIfMobile();
 }
 
 function newChat(){
-clearChat();
+  clearChat();
 }
 
 function loadSidebarHistory(){
+  let history = JSON.parse(localStorage.getItem("chat")) || [];
+  sidebarHistory.innerHTML="";
+  
+  history.slice(-10).forEach(msg=>{
+    if(msg.type==="user"){
+      let div=document.createElement("div");
+      div.className="px-3 py-2.5 bg-gray-50 border border-gray-100 hover:border-agra-blue hover:bg-blue-50 rounded-lg transition-colors duration-200 cursor-pointer truncate text-gray-700 text-sm font-medium mb-1";
+      div.textContent=msg.text;
+      
+      div.onclick = () => {
+        toggleSidebarIfMobile();
+      };
 
-let history = JSON.parse(localStorage.getItem("chat")) || [];
-
-sidebarHistory.innerHTML="";
-
-history.slice(-10).forEach(msg=>{
-
-if(msg.type==="user"){
-
-let div=document.createElement("div");
-
-div.className="p-2 bg-white/5 rounded-lg hover:bg-blue-600 cursor-pointer truncate";
-
-div.textContent=msg.text;
-
-sidebarHistory.appendChild(div);
-
+      sidebarHistory.appendChild(div);
+    }
+  });
 }
 
+// Quick action buttons listener
+document.querySelectorAll('#welcome-screen button').forEach(button => {
+  button.addEventListener('click', () => {
+    textarea.value = button.textContent.replace(/"/g, '');
+    sendMessage();
+  });
 });
 
-}
-
-function speakText(text){
-
-const speech = new SpeechSynthesisUtterance(text);
-
-speech.lang="en-US";
-
-speech.rate=1;
-
-speech.pitch=1;
-
-window.speechSynthesis.speak(speech);
-
-}
-
+// Speech Recognition Logic
 let recognition;
 let isListening=false;
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = "en-IN"; 
+  
+  recognition.onresult = function (event) {
+    textarea.value = event.results[0][0].transcript;
+  };
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-recognition = new SpeechRecognition();
-
-recognition.lang = "en-US";
-
-recognition.onresult = function (event) {
-textarea.value = event.results[0][0].transcript;
-};
-
-recognition.onend = function () {
-isListening = false;
-document.getElementById("mic-btn").classList.remove("bg-red-600");
-};
-
+  recognition.onend = function () {
+    isListening = false;
+    let micBtn = document.getElementById("mic-btn");
+    micBtn.classList.remove("bg-red-100", "text-agra-red", "animate-pulse-glow", "border", "border-red-300");
+    micBtn.classList.add("bg-gray-100", "text-gray-600");
+  };
 }
 
 function toggleMic(){
+  if(!recognition){
+    alert("Speech Recognition is not supported in your browser. Please try Chrome or Edge.");
+    return;
+  }
+  
+  let micBtn = document.getElementById("mic-btn");
 
-if(!recognition){
-alert("Speech Recognition not supported");
-return;
+  if(!isListening){
+    recognition.start();
+    isListening=true;
+    // Solid red recording indicator
+    micBtn.classList.remove("bg-gray-100", "text-gray-600");
+    micBtn.classList.add("bg-red-100", "text-agra-red", "animate-pulse-glow", "border", "border-red-300");
+  } else {
+    recognition.stop();
+    isListening=false;
+    micBtn.classList.remove("bg-red-100", "text-agra-red", "animate-pulse-glow", "border", "border-red-300");
+    micBtn.classList.add("bg-gray-100", "text-gray-600");
+  }
 }
-
-if(!isListening){
-recognition.start();
-isListening=true;
-document.getElementById("mic-btn").classList.add("bg-red-600");
-}else{
-recognition.stop();
-isListening=false;
-document.getElementById("mic-btn").classList.remove("bg-red-600");
-}
-
-}
-
 </script>
 
 </body>

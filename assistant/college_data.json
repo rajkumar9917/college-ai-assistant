@@ -20,16 +20,203 @@
         "answer": "Yes, we have a dedicated placement cell for student recruitment."
     },
     {
-        "question": "who made you",
-        "answer": "I was created by thakur Raj kumar."
+        "question": "tumhe kisane banaya h",
+        "answer": "I was created by Thakur Raj Kumar and Rohit Kumar."
     },
     {
-        "question": "who is the hod of bca and bba department?",
-        "answer": "Dr.Parul Mahajan is hod of departments."
+        "question": " hod of bca and bba",
+        "answer": "Dr. Parul Mahajan is HOD of BCA and BBA departments."
     },
     {
-        "question": "Hello ?",
-        "answer": "Hey i am fine and how i can help you."
+        "question": "hello",
+        "answer": "Hey! I am fine. How can I help you?"
+    },
 
+    {
+        "question": "bca admission kaise le",
+        "answer": "BCA admission ke liye college office ya DBRAU process follow kare."
+    },
+    {
+        "question": "how to take admission in bca",
+        "answer": "You can take admission through the university process or by visiting the college office."
+    },
+    {
+        "question": "bca ki fees kitni hai",
+        "answer": "Fees course ke hisab se hoti hai, exact detail ke liye office contact kare."
+    },
+    {
+        "question": "what is bca fee structure",
+        "answer": "The fee structure varies depending on the course. Contact the college office."
+    },
+
+    {
+        "question": "bba admission kaise hota hai",
+        "answer": "BBA admission merit ya entrance ke basis par hota hai."
+    },
+    {
+        "question": "how to get admission in bba",
+        "answer": "Admission is based on merit or entrance criteria."
+    },
+
+    {
+        "question": "college me admission kab start hota hai",
+        "answer": "Admission June ya July me start hote hai."
+    },
+    {
+        "question": "when admission starts in college",
+        "answer": "Admissions usually start between June and July."
+    },
+
+    {
+        "question": "cutoff kitni jati hai",
+        "answer": "Cutoff har saal change hoti hai."
+    },
+    {
+        "question": "what is cutoff for admission",
+        "answer": "Cutoff varies every year depending on course and category."
+    },
+
+    {
+        "question": "college ka timing kya hai",
+        "answer": "College timing morning se afternoon tak hoti hai."
+    },
+    {
+        "question": "what is college timing",
+        "answer": "College runs from morning to afternoon depending on schedule."
+    },
+
+    {
+        "question": "attendance kitni required hai",
+        "answer": "Minimum 75% attendance required hoti hai."
+    },
+    {
+        "question": "is attendance compulsory",
+        "answer": "Yes, minimum attendance is compulsory."
+    },
+
+    {
+        "question": "exam kab hote hai",
+        "answer": "Exams semester ke end me hote hai."
+    },
+    {
+        "question": "when exams are conducted",
+        "answer": "Exams are conducted at the end of semester."
+    },
+
+    {
+        "question": "result kab aata hai",
+        "answer": "Result exams ke kuch hafton baad aata hai."
+    },
+    {
+        "question": "when result is declared",
+        "answer": "Results are declared a few weeks after exams."
+    },
+
+    {
+        "question": "result kaise check kare",
+        "answer": "Result DBRAU website par check kar sakte ho."
+    },
+    {
+        "question": "how to check result",
+        "answer": "You can check results on the official university website."
+    },
+
+    {
+        "question": "placement hota hai kya",
+        "answer": "Haan, placement cell available hai."
+    },
+    {
+        "question": "does college provide placement",
+        "answer": "Yes, the college has a placement cell."
+    },
+
+    {
+        "question": "internship milti hai kya",
+        "answer": "Haan, internship opportunities available hoti hai."
+    },
+    {
+        "question": "does college provide internship",
+        "answer": "Yes, internships are provided in some courses."
+    },
+
+    {
+        "question": "hostel hai kya",
+        "answer": "Haan, hostel facility available hai."
+    },
+    {
+        "question": "is hostel available",
+        "answer": "Yes, hostel facilities are available."
+    },
+
+    {
+        "question": "canteen hai kya",
+        "answer": "Haan, canteen available hai."
+    },
+    {
+        "question": "is canteen available",
+        "answer": "Yes, canteen is available."
+    },
+
+    {
+        "question": "wifi hai kya",
+        "answer": "Basic internet facility available hai."
+    },
+    {
+        "question": "is wifi available",
+        "answer": "Yes, basic internet facility is available."
+    },
+
+    {
+        "question": "ragging hoti hai kya",
+        "answer": "Nahi, ragging banned hai."
+    },
+    {
+        "question": "is ragging allowed",
+        "answer": "No, ragging is strictly prohibited."
+    },
+
+    {
+        "question": "faculty kaisi hai",
+        "answer": "Faculty experienced aur supportive hai."
+    },
+    {
+        "question": "how is faculty",
+        "answer": "Faculty is experienced and helpful."
+    },
+
+    {
+        "question": "scholarship milti hai kya",
+        "answer": "Haan, scholarship available hai."
+    },
+    {
+        "question": "is scholarship available",
+        "answer": "Yes, scholarships are available."
+    },
+
+    {
+        "question": "documents kya chahiye",
+        "answer": "Marksheets, ID proof, photos aur TC chahiye."
+    },
+    {
+        "question": "what documents required",
+        "answer": "You need marksheets, ID proof, photos and TC."
+    },
+
+    {
+        "question": "college safe hai kya",
+        "answer": "Haan, college safe hai."
+    },
+    {
+        "question": "is college safe",
+        "answer": "Yes, college campus is safe."
+    },
+
+    {
+        "question": "bca ke baad kya kare",
+        "answer": "Aap MCA ya job kar sakte ho."
+    },
+    {
+        "question": "what to do after bca",
+        "answer": "You can go for MCA or job after BCA."
     }
 ]
