@@ -125,5 +125,5 @@ Else → Show "No information available"
 
 # 👨‍💻 Author
 
-Rajkumar
+Rajkumar And Rohit Kumar
 BCA Student | Python & Django Developer
